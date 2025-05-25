@@ -1,0 +1,19 @@
+# QEMU flags
+if("${ARCH}" STREQUAL "x86_64")
+  set(QEMU_CMD qemu-system-x86_64
+    -M q35
+    -drive if=pflash,file=${CMAKE_SOURCE_DIR}/ovmf/ovmf-code-${ARCH}.fd
+    -drive file=${IMAGE_NAME}.hdd,format=raw
+    @QEMUFLAGS@
+  )
+elseif("${ARCH}" STREQUAL "aarch64")
+  set(QEMU_CMD qemu-system-aarch64
+    -M virt
+    -cpu cortex-a76
+    -drive if=pflash,file=${CMAKE_SOURCE_DIR}/ovmf/ovmf-code-${ARCH}.fd
+    -drive file=${IMAGE_NAME}.hdd,format=raw
+    @QEMUFLAGS@
+  )
+endif()
+
+execute_process(COMMAND ${QEMU_CMD})
